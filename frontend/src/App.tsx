@@ -56,7 +56,7 @@ const CONTACTS: Contact[] = [
   {
     id: "lynch",
     name: "Peter Lynch",
-    avatar: "/PL.jpeg",
+    avatar: "",
     lastMessage: "Ask me anything about investing and stock picking.",
     time: "Now",
     online: true,
