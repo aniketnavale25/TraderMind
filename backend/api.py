@@ -27,7 +27,7 @@ app.add_middleware(
 async def startup():
     load_pipeline()
 
-# ── Models ────────────────────────────────────────────────────
+# ── Models ─
 class Message(BaseModel):
     user:      str
     assistant: str
