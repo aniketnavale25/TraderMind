@@ -1,0 +1,23 @@
+# Environment
+.env
+
+# Virtual environment
+venv/
+
+# ChromaDB
+chroma_peter_lynch/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# HuggingFace model cache
+.cache/
+
+# Test files
+test.py
+
+# OS
+.DS_Store
+Thumbs.db
