@@ -5,7 +5,7 @@
 venv/
 
 # ChromaDB
-chroma_peter_lynch/
+chroma_traders/
 
 # Python cache
 __pycache__/
