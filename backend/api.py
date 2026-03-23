@@ -8,9 +8,11 @@ app = FastAPI()
 # ── CORS — allow your TypeScript frontend to call this API ───
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000",   # Next.js dev
-                   "http://localhost:5173",   # Vite dev
-                   "*"],                      # remove * in production
+    allow_origins=[
+        "http://localhost:5173",
+        "https://tradermind-orpin.vercel.app",
+        "https://aniketnx-tradermind-api.hf.space",
+    ],                    
     allow_methods=["*"],
     allow_headers=["*"],
 )
