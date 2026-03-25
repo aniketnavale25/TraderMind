@@ -301,8 +301,27 @@ export default function App() {
       <aside className="hidden md:flex h-screen w-20 lg:w-72 rounded-r-[3rem] bg-[#f3f3f8] flex-col py-8 px-4 lg:px-6 space-y-8 shadow-[0_10px_40px_rgba(26,28,31,0.06)] z-10 font-['Inter'] antialiased tracking-tight transition-all duration-300">
         <div className="flex flex-col space-y-4">
           <div className="flex items-center justify-between">
-            <div className="w-10 h-10 lg:w-12 lg:h-12 rounded-full bg-gradient-to-br from-[#1d6fa4] to-[#007AFF] flex items-center justify-center text-white font-bold text-sm border-2 border-white shadow-sm">
-              TM
+            <div className="w-10 h-10 lg:w-12 lg:h-12 rounded-full overflow-hidden flex items-center justify-center border-2 border-white shadow-sm">
+              <img
+                src="/TraderMind.png"
+                alt="TraderMind Logo"
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  e.currentTarget.style.display = "none";
+                  const parent = e.currentTarget.parentElement;
+                  if (parent) {
+                    parent.innerHTML = "TM";
+                    parent.classList.add(
+                      "bg-gradient-to-br",
+                      "from-[#1d6fa4]",
+                      "to-[#007AFF]",
+                      "text-white",
+                      "font-bold",
+                      "text-sm",
+                    );
+                  }
+                }}
+              />
             </div>
             <button className="hidden lg:flex w-10 h-10 rounded-full bg-white items-center justify-center text-[#0058bc] transition-transform active:scale-90 shadow-sm">
               <Edit size={20} />
