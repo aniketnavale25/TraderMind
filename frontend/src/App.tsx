@@ -159,6 +159,49 @@ export default function App() {
   const [isTyping, setIsTyping] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const prevContactIdRef = useRef<string | null>(null);
+
+  // ── Persistence: Load last session on mount ────────────────
+  useEffect(() => {
+    const lastId = localStorage.getItem("tm_last_contact_id");
+    if (lastId) {
+      const contact = CONTACTS.find((c) => c.id === lastId);
+      if (contact) {
+        setSelectedContact(contact);
+        prevContactIdRef.current = contact.id;
+        const savedMessages = localStorage.getItem(`tm_history_${contact.id}`);
+        if (savedMessages) {
+          try {
+            const parsed = JSON.parse(savedMessages);
+            setMessages(
+              parsed.map((m: any) => ({
+                ...m,
+                timestamp: new Date(m.timestamp),
+              })),
+            );
+          } catch (e) {
+            console.error("Failed to load history", e);
+          }
+        }
+      }
+    }
+  }, []);
+
+  // ── Persistence: Save messages whenever they change ────────
+  useEffect(() => {
+    // Guard: Don't save if we just switched contacts but haven't loaded the new messages yet
+    if (selectedContact?.id !== prevContactIdRef.current) {
+      prevContactIdRef.current = selectedContact?.id || null;
+      return;
+    }
+
+    if (selectedContact && messages.length > 0) {
+      localStorage.setItem(
+        `tm_history_${selectedContact.id}`,
+        JSON.stringify(messages),
+      );
+    }
+  }, [messages, selectedContact]);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -168,7 +211,25 @@ export default function App() {
 
   const handleSelectContact = (contact: Contact) => {
     setSelectedContact(contact);
+    localStorage.setItem("tm_last_contact_id", contact.id);
     setError(null);
+
+    const savedMessages = localStorage.getItem(`tm_history_${contact.id}`);
+    if (savedMessages) {
+      try {
+        const parsed = JSON.parse(savedMessages);
+        setMessages(
+          parsed.map((m: any) => ({
+            ...m,
+            timestamp: new Date(m.timestamp),
+          })),
+        );
+        return;
+      } catch (e) {
+        console.error("Failed to load history", e);
+      }
+    }
+
     setMessages([
       {
         id: "1",
@@ -179,6 +240,11 @@ export default function App() {
         timestamp: new Date(),
       },
     ]);
+  };
+
+  const handleCloseChat = () => {
+    setSelectedContact(null);
+    localStorage.removeItem("tm_last_contact_id");
   };
 
   // ── Send message ────────────────────────────────────────────
@@ -412,7 +478,7 @@ export default function App() {
                     <Video size={20} fill="currentColor" />
                   </button>
                   <button
-                    onClick={() => setSelectedContact(null)}
+                    onClick={handleCloseChat}
                     className="p-2 hover:bg-gray-100 rounded-full text-gray-500 transition-colors"
                   >
                     <X size={20} />
